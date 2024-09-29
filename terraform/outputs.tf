@@ -1,11 +1,14 @@
 output "s3_bucket_name" {
-  value = aws_s3_bucket.devops-bucket.bucket
+  description = "The name of the S3 bucket"
+  value       = aws_s3_bucket.devops-bucket.bucket
 }
 
 output "s3_bucket_region" {
-  value = aws_s3_bucket.devops-bucket.region
+  description = "The region of the S3 bucket"
+  value       = aws_s3_bucket.devops-bucket.region
 }
 
 output "terraform_github_actions_role" {
-  value = aws_iam_role.github_actions_role.arn
+  description = "The ARN of the GitHub Actions IAM role"
+  value       = aws_iam_role.github_actions_role.arn
 }

@@ -1,13 +1,10 @@
 resource "aws_s3_bucket" "devops-bucket" {
-  bucket = "devops-second"
+  bucket = var.bucket_name
 
   tags = {
     Name        = "DevOps Terraform Bucket"
-    Environment = "Development"
+    Environment = var.environment
   }
-
-  # Add the bucket key configuration
-  # bucket_key_enabled = true
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "devops-bucket-encryption" {
@@ -15,7 +12,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "devops-bucket-enc
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
+      sse_algorithm = var.sse_algorithm
     }
   }
 }
@@ -24,6 +21,6 @@ resource "aws_s3_bucket_versioning" "devops-bucket-versioning" {
   bucket = aws_s3_bucket.devops-bucket.id
 
   versioning_configuration {
-    status = "Enabled"
+    status = var.versioning_enabled ? "Enabled" : "Suspended"
   }
 }
