@@ -8,13 +8,21 @@ resource "aws_iam_role" "github_actions_role" {
       {
         "Effect": "Allow",
         "Principal": {
-          "Service": "ec2.amazonaws.com"
+          "Federated": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com"
         },
-        "Action": "sts:AssumeRole"
+        "Action": "sts:AssumeRoleWithWebIdentity",
+        "Condition": {
+          "StringEquals": {
+            "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+            "token.actions.githubusercontent.com:sub": "repo:spaceragga/rsschool-devops-course-tasks:*"
+          }
+        }
       }
     ]
   })
 }
+
+data "aws_caller_identity" "current" {}
 
 # Attach AmazonEC2FullAccess
 resource "aws_iam_role_policy_attachment" "ec2_full_access" {
